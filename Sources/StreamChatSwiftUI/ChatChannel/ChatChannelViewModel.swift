@@ -150,7 +150,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         messages = LazyCachedMapCollection(
             source: channelDataSource.messages.reversed(),
             map: { $0 }
-        ) 
+        )
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -418,10 +418,16 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         if shouldAnimate(changes: changes) {
             withAnimation {
-                self.messages = messages
+                self.messages = LazyCachedMapCollection(
+                    source: channelDataSource.messages.reversed(),
+                    map: { $0 }
+                )
             }
         } else {
-            self.messages = messages
+            self.messages = LazyCachedMapCollection(
+                source: channelDataSource.messages.reversed(),
+                map: { $0 }
+            )
         }
         
         refreshMessageListIfNeeded()
@@ -468,7 +474,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     
     @objc public func onViewAppear() {
         setActive()
-        messages = channelDataSource.messages
+        messages = LazyCachedMapCollection(
+            source: channelDataSource.messages.reversed(),
+            map: { $0 }
+        )
         firstUnreadMessageId = channelDataSource.firstUnreadMessageId
         checkNameChange()
     }
@@ -565,7 +574,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
                 return
             }
             if readsString != newReadsString && isActive {
-                messages = channelDataSource.messages
+                messages = LazyCachedMapCollection(
+                    source: channelDataSource.messages.reversed(),
+                    map: { $0 }
+                )
                 readsString = newReadsString
             }
         default:

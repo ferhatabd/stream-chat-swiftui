@@ -147,7 +147,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             channelDataSource = ChatChannelDataSource(controller: channelController)
         }
         channelDataSource.delegate = self
-        messages = channelDataSource.messages.reversed()
+        messages = LazyCachedMapCollection(
+            source: channelDataSource.messages.reversed(),
+            map: { $0 }
+        ) 
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in

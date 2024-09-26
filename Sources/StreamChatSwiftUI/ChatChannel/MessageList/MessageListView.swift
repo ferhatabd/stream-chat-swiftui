@@ -556,21 +556,21 @@ struct TypingIndicatorBottomView: View {
     }
 }
 
-private class MessageRenderingUtil {
+public class MessageRenderingUtil {
 
     private var previousTopMessage: ChatMessage?
 
-    static let shared = MessageRenderingUtil()
+    public static let shared = MessageRenderingUtil()
 
-    var hasPreviousMessageSet: Bool {
+    public var hasPreviousMessageSet: Bool {
         previousTopMessage != nil
     }
 
-    func update(previousTopMessage: ChatMessage?) {
+    public func update(previousTopMessage: ChatMessage?) {
         self.previousTopMessage = previousTopMessage
     }
 
-    func messagesToSkipRendering(newMessages: LazyCachedMapCollection<ChatMessage>) -> [String] {
+    public func messagesToSkipRendering(newMessages: LazyCachedMapCollection<ChatMessage>) -> [String] {
         let newTopMessage = newMessages.first
         if newTopMessage?.id == previousTopMessage?.id {
             return []

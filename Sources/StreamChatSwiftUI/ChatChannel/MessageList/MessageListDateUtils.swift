@@ -9,7 +9,7 @@ public class MessageListDateUtils {
 
     private let messageListConfig: MessageListConfig
 
-    init(messageListConfig: MessageListConfig) {
+    public init(messageListConfig: MessageListConfig) {
         self.messageListConfig = messageListConfig
     }
 

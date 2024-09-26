@@ -443,9 +443,9 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             scrolledId = firstUnreadMessageId
         }
         
-        if !showScrollToLatestButton && scrolledId == nil && !loadingNextMessages {
+//        if !showScrollToLatestButton && scrolledId == nil && !loadingNextMessages {
             updateScrolledIdToNewestMessage()
-        }
+//        }
     }
     
     func dataSource(
@@ -518,7 +518,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         loadingNextMessages = true
         
-        if scrollPosition != messages.first?.messageId {
+        if scrollPosition != messages.last?.messageId {
             scrollPosition = messages[index].messageId
         }
 

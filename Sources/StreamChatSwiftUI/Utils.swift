@@ -54,8 +54,8 @@ public class Utils {
 
     public lazy var audioSessionFeedbackGenerator: AudioSessionFeedbackGenerator = StreamAudioSessionFeedbackGenerator()
 
-    var messageCachingUtils = MessageCachingUtils()
-    var messageListDateUtils: MessageListDateUtils
+    public var messageCachingUtils = MessageCachingUtils()
+    public var messageListDateUtils: MessageListDateUtils
     var channelControllerFactory = ChannelControllerFactory()
     
     internal var _audioPlayer: AudioPlaying?

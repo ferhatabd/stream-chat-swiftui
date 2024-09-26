@@ -8,14 +8,14 @@ import UIKit
 
 /// Caches messages related data to avoid accessing the database.
 /// Cleared on chat channel view dismiss or memory warning.
-class MessageCachingUtils {
+public class MessageCachingUtils {
 
     private var messageAuthorMapping = [String: String]()
     private var messageAuthors = [String: UserDisplayInfo]()
     private var checkedMessageIds = Set<String>()
     private var quotedMessageMapping = [String: ChatMessage]()
 
-    var scrollOffset: CGFloat = 0
+    public var scrollOffset: CGFloat = 0
     var messageThreadShown = false {
         didSet {
             if !messageThreadShown {

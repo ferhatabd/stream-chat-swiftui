@@ -5,7 +5,7 @@
 import Foundation
 import StreamChat
 
-class MessageListDateUtils {
+public class MessageListDateUtils {
 
     private let messageListConfig: MessageListConfig
 

@@ -18,7 +18,7 @@ public class MessageListDateUtils {
     ///   - message, the message whose index is searched for.
     ///   - messages: the list of messages.
     ///  - Returns: optional index.
-    func indexForMessageDate(
+    public func indexForMessageDate(
         message: ChatMessage,
         in messages: LazyCachedMapCollection<ChatMessage>
     ) -> Int? {
@@ -35,7 +35,7 @@ public class MessageListDateUtils {
     ///   - message, the message whose index is searched for.
     ///   - messages: the list of messages.
     ///  - Returns: optional index.
-    func index(
+    public func index(
         for message: ChatMessage,
         in messages: LazyCachedMapCollection<ChatMessage>
     ) -> Int? {
@@ -51,7 +51,7 @@ public class MessageListDateUtils {
     ///   - index, the index of a message.
     ///   - messages: the list of messages.
     ///  - Returns: optional date, shown above a message.
-    func showMessageDate(
+    public func showMessageDate(
         for index: Int?,
         in messages: LazyCachedMapCollection<ChatMessage>
     ) -> Date? {

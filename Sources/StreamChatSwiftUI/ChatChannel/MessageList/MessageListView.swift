@@ -236,7 +236,7 @@ public struct MessageListView<Factory: ViewFactory>: View, KeyboardReadable {
                         }
                         let scrollButtonShown = offsetValue < -20
                         if scrollButtonShown != showScrollToLatestButton {
-            //                showScrollToLatestButton = scrollButtonShown
+                            showScrollToLatestButton = scrollButtonShown
                         }
                         if keyboardShown && diff < -20 {
                             keyboardShown = false

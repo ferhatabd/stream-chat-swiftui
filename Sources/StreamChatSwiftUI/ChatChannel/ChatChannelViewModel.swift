@@ -147,10 +147,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             channelDataSource = ChatChannelDataSource(controller: channelController)
         }
         channelDataSource.delegate = self
-        messages = LazyCachedMapCollection(
-            source: channelDataSource.messages.reversed(),
-            map: { $0 }
-        )
+        messages = channelDataSource.messages
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -418,23 +415,17 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         if shouldAnimate(changes: changes) {
             withAnimation {
-                self.messages = LazyCachedMapCollection(
-                    source: channelDataSource.messages.reversed(),
-                    map: { $0 }
-                )
+                self.messages = messages
             }
         } else {
-            self.messages = LazyCachedMapCollection(
-                source: channelDataSource.messages.reversed(),
-                map: { $0 }
-            )
+            self.messages = messages
         }
         
         refreshMessageListIfNeeded()
         
         // Jump to a message but we were already scrolled to the bottom
         if !channelDataSource.hasLoadedAllNextMessages {
-//            showScrollToLatestButton = true
+            showScrollToLatestButton = true
         }
         
         // Set scroll id after the message id has changed
@@ -443,9 +434,9 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             scrolledId = firstUnreadMessageId
         }
         
-//        if !showScrollToLatestButton && scrolledId == nil && !loadingNextMessages {
+        if !showScrollToLatestButton && scrolledId == nil && !loadingNextMessages {
             updateScrolledIdToNewestMessage()
-//        }
+        }
     }
     
     func dataSource(
@@ -474,10 +465,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     
     @objc public func onViewAppear() {
         setActive()
-        messages = LazyCachedMapCollection(
-            source: channelDataSource.messages.reversed(),
-            map: { $0 }
-        )
+        messages = channelDataSource.messages
         firstUnreadMessageId = channelDataSource.firstUnreadMessageId
         checkNameChange()
     }
@@ -518,7 +506,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         loadingNextMessages = true
         
-        if scrollPosition != messages.last?.messageId {
+        if scrollPosition != messages.first?.messageId {
             scrollPosition = messages[index].messageId
         }
 
@@ -574,10 +562,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
                 return
             }
             if readsString != newReadsString && isActive {
-                messages = LazyCachedMapCollection(
-                    source: channelDataSource.messages.reversed(),
-                    map: { $0 }
-                )
+                messages = channelDataSource.messages
                 readsString = newReadsString
             }
         default:
@@ -740,7 +725,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if scrolledId != nil {
             scrolledId = nil
         }
-        scrolledId = messages.last?.messageId
+        scrolledId = messages.first?.messageId
     }
     
     private func cleanupAudioPlayer() {

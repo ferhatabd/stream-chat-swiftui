@@ -434,7 +434,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         // Jump to a message but we were already scrolled to the bottom
         if !channelDataSource.hasLoadedAllNextMessages {
-            showScrollToLatestButton = true
+//            showScrollToLatestButton = true
         }
         
         // Set scroll id after the message id has changed

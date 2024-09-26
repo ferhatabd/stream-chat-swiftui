@@ -147,7 +147,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             channelDataSource = ChatChannelDataSource(controller: channelController)
         }
         channelDataSource.delegate = self
-        messages = channelDataSource.messages
+        messages = .init(source: channelDataSource.messages, map: { $0 })
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -415,10 +415,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         if shouldAnimate(changes: changes) {
             withAnimation {
-                self.messages = messages
+                self.messages = .init(source: messages, map: { $0 })
             }
         } else {
-            self.messages = messages
+            self.messages = .init(source: messages, map: { $0 })
         }
         
         refreshMessageListIfNeeded()
@@ -562,7 +562,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
                 return
             }
             if readsString != newReadsString && isActive {
-                messages = channelDataSource.messages
+                messages = .init(source: channelDataSource.messages, map: { $0 })
                 readsString = newReadsString
             }
         default:

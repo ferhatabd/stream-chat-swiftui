@@ -16,6 +16,17 @@ public class MessageCachingUtils {
     private var quotedMessageMapping = [String: ChatMessage]()
 
     public var scrollOffset: CGFloat = 0
+    
+    public init(messageAuthorMapping: [String : String] = [String: String](), messageAuthors: [String : UserDisplayInfo] = [String: UserDisplayInfo](), checkedMessageIds: Set<String> = Set<String>(), quotedMessageMapping: [String : ChatMessage] = [String: ChatMessage](), scrollOffset: CGFloat, messageThreadShown: Bool = false, jumpToReplyId: String? = nil) {
+        self.messageAuthorMapping = messageAuthorMapping
+        self.messageAuthors = messageAuthors
+        self.checkedMessageIds = checkedMessageIds
+        self.quotedMessageMapping = quotedMessageMapping
+        self.scrollOffset = scrollOffset
+        self.messageThreadShown = messageThreadShown
+        self.jumpToReplyId = jumpToReplyId
+    }
+    
     var messageThreadShown = false {
         didSet {
             if !messageThreadShown {

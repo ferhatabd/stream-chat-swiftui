@@ -740,7 +740,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if scrolledId != nil {
             scrolledId = nil
         }
-        scrolledId = messages.first?.messageId
+        scrolledId = messages.last?.messageId
     }
     
     private func cleanupAudioPlayer() {

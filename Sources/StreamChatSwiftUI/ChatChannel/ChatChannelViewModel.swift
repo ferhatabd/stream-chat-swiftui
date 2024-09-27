@@ -328,17 +328,11 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             return
         }
         
-        let message: ChatMessage =
-        {
-            guard index > -1 else {
-                return messages.last!
-            }
-            return messages[index]
-        }()
+        let message = messages[index]
         if scrollDirection == .up {
-            checkForOlderMessages(index: index)
-        } else {
             checkForNewerMessages(index: index)
+        } else {
+            checkForOlderMessages(index: index)
         }
         if let firstUnreadMessageId, firstUnreadMessageId.contains(message.id), hasSetInitialCanMarkRead {
             canMarkRead = true
@@ -346,7 +340,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if utils.messageListConfig.dateIndicatorPlacement == .overlay {
             save(lastDate: message.createdAt)
         }
-        if index == 0, channelDataSource.hasLoadedAllNextMessages {
+        if index == messages.count - 1, channelDataSource.hasLoadedAllNextMessages {
             let isActive = UIApplication.shared.applicationState == .active
             if isActive && canMarkRead {
                 sendReadEventIfNeeded(for: message)
@@ -487,7 +481,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     // MARK: - private
     
     private func checkForOlderMessages(index: Int) {
-        guard index >= channelDataSource.messages.count - 25 else { return }
+        guard index <= 25 else { return }
         guard !loadingPreviousMessages else { return }
         guard !channelController.hasLoadedAllPreviousMessages else { return }
         
@@ -506,7 +500,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     }
         
     private func checkForNewerMessages(index: Int) {
-        guard index <= 5 else { return }
+        guard index >= messages.count - 5 else { return }
         guard !loadingNextMessages else { return }
         guard !channelController.hasLoadedAllNextMessages else { return }
         

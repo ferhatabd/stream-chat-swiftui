@@ -4,40 +4,40 @@
 
 import SwiftUI
 
-struct FlippedUpsideDown: ViewModifier {
-    func body(content: Content) -> some View {
+public struct FlippedUpsideDown: ViewModifier {
+    public func body(content: Content) -> some View {
         content
             .rotationEffect(.radians(Double.pi))
             .scaleEffect(x: -1, y: 1, anchor: .center)
     }
 }
 
-extension View {
+public extension View {
     func flippedUpsideDown() -> some View {
         modifier(FlippedUpsideDown())
     }
 }
 
-struct ScrollViewOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+public struct ScrollViewOffsetPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGFloat? = nil
 
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+    public static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = value ?? nextValue()
     }
 }
 
-struct WidthPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+public struct WidthPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGFloat? = nil
 
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+    public static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = nextValue() ?? value
     }
 }
 
-struct HeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat? = nil
+public struct HeightPreferenceKey: PreferenceKey {
+    public static var defaultValue: CGFloat? = nil
 
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+    public static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
         value = value ?? nextValue()
     }
 }

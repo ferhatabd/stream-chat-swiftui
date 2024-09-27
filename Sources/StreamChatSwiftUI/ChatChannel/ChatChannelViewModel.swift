@@ -147,7 +147,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             channelDataSource = ChatChannelDataSource(controller: channelController)
         }
         channelDataSource.delegate = self
-        messages = .init(source: channelDataSource.messages.reversed(), map: { $0 })
+        messages = channelDataSource.messages
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -246,7 +246,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         } else {
             channelDataSource.loadFirstPage { [weak self] _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.scrolledId = self?.messages.last?.messageId
+                    self?.scrolledId = self?.messages.first?.messageId
                     self?.showScrollToLatestButton = false
                 }
             }
@@ -265,7 +265,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             }
             return false
         }
-        if messageId == messages.last?.messageId {
+        if messageId == messages.first?.messageId {
             scrolledId = nil
             return true
         } else {
@@ -330,9 +330,9 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         let message = messages[index]
         if scrollDirection == .up {
-            checkForNewerMessages(index: index)
-        } else {
             checkForOlderMessages(index: index)
+        } else {
+            checkForNewerMessages(index: index)
         }
         if let firstUnreadMessageId, firstUnreadMessageId.contains(message.id), hasSetInitialCanMarkRead {
             canMarkRead = true
@@ -340,7 +340,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if utils.messageListConfig.dateIndicatorPlacement == .overlay {
             save(lastDate: message.createdAt)
         }
-        if index == messages.count - 1, channelDataSource.hasLoadedAllNextMessages {
+        if index == 0, channelDataSource.hasLoadedAllNextMessages {
             let isActive = UIApplication.shared.applicationState == .active
             if isActive && canMarkRead {
                 sendReadEventIfNeeded(for: message)
@@ -415,10 +415,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         if shouldAnimate(changes: changes) {
             withAnimation {
-                self.messages = .init(source: messages.reversed(), map: { $0 })
+                self.messages = messages
             }
         } else {
-            self.messages = .init(source: messages.reversed(), map: { $0 })
+            self.messages = messages
         }
         
         refreshMessageListIfNeeded()
@@ -465,7 +465,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     
     @objc public func onViewAppear() {
         setActive()
-        messages = .init(source: channelDataSource.messages.reversed(), map: { $0 })
+        messages = channelDataSource.messages
         firstUnreadMessageId = channelDataSource.firstUnreadMessageId
         checkNameChange()
     }
@@ -481,7 +481,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     // MARK: - private
     
     private func checkForOlderMessages(index: Int) {
-        guard index <= 25 else { return }
+        guard index >= channelDataSource.messages.count - 25 else { return }
         guard !loadingPreviousMessages else { return }
         guard !channelController.hasLoadedAllPreviousMessages else { return }
         
@@ -500,13 +500,13 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     }
         
     private func checkForNewerMessages(index: Int) {
-        guard index >= messages.count - 5 else { return }
+        guard index <= 5 else { return }
         guard !loadingNextMessages else { return }
         guard !channelController.hasLoadedAllNextMessages else { return }
         
         loadingNextMessages = true
         
-        if scrollPosition != messages.last?.messageId {
+        if scrollPosition != messages.first?.messageId {
             scrollPosition = messages[index].messageId
         }
 
@@ -562,7 +562,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
                 return
             }
             if readsString != newReadsString && isActive {
-                messages = .init(source: channelDataSource.messages.reversed(), map: { $0 })
+                messages = channelDataSource.messages
                 readsString = newReadsString
             }
         default:
@@ -725,7 +725,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if scrolledId != nil {
             scrolledId = nil
         }
-        scrolledId = messages.last?.messageId
+        scrolledId = messages.first?.messageId
     }
     
     private func cleanupAudioPlayer() {

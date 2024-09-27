@@ -147,7 +147,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             channelDataSource = ChatChannelDataSource(controller: channelController)
         }
         channelDataSource.delegate = self
-        messages = reverseMessages(channelDataSource.messages)
+        messages = channelDataSource.messages
         channel = channelController.channel
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -350,7 +350,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     
     open func groupMessages() {
         var temp = [String: [String]]()
-        for (index, message) in reverseMessages(messages).enumerated() {
+        for (index, message) in messages.enumerated() {
             let date = message.createdAt
             temp[message.id] = []
             if index == 0 {
@@ -415,10 +415,10 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         if shouldAnimate(changes: changes) {
             withAnimation {
-                self.messages = reverseMessages(messages)
+                self.messages = messages
             }
         } else {
-            self.messages = reverseMessages(messages)
+            self.messages = messages
         }
         
         refreshMessageListIfNeeded()
@@ -481,7 +481,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     // MARK: - private
     
     private func checkForOlderMessages(index: Int) {
-        guard index <= 25 else { return }
+        guard index >= channelDataSource.messages.count - 25 else { return }
         guard !loadingPreviousMessages else { return }
         guard !channelController.hasLoadedAllPreviousMessages else { return }
         
@@ -500,7 +500,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     }
         
     private func checkForNewerMessages(index: Int) {
-        guard index >= messages.count - 5 else { return }
+        guard index <= 5 else { return }
         guard !loadingNextMessages else { return }
         guard !channelController.hasLoadedAllNextMessages else { return }
         
@@ -725,7 +725,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if scrolledId != nil {
             scrolledId = nil
         }
-        scrolledId = messages.last?.messageId
+        scrolledId = messages.first?.messageId
     }
     
     private func cleanupAudioPlayer() {
@@ -734,11 +734,6 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         utils.audioPlayer.updateRate(.normal)
         utils.audioPlayer.stop()
         utils._audioPlayer = nil
-    }
-    
-    /// Revserses given messages
-    private func reverseMessages(_ messages: LazyCachedMapCollection<ChatMessage>) -> LazyCachedMapCollection<ChatMessage> {
-        .init(source: messages.reversed(), map: { $0 })
     }
     
     deinit {
@@ -760,7 +755,7 @@ extension ChatMessage: Identifiable {
         messageId
     }
     
-    public var messageId: String {
+    var messageId: String {
         InjectedValues[\.utils].messageIdBuilder.makeMessageId(for: self)
     }
     

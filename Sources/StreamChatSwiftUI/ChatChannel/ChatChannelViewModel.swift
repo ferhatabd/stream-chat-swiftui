@@ -749,13 +749,13 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
     }
 }
 
-extension ChatMessage: Identifiable {
+public extension ChatMessage: Identifiable {
     
-    public var scrollMessageId: String {
+    var scrollMessageId: String {
         messageId
     }
     
-    public var messageId: String {
+    var messageId: String {
         InjectedValues[\.utils].messageIdBuilder.makeMessageId(for: self)
     }
     

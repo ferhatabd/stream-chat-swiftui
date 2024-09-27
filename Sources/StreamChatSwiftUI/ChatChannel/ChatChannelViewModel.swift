@@ -755,7 +755,7 @@ extension ChatMessage: Identifiable {
         messageId
     }
     
-    var messageId: String {
+    public var messageId: String {
         InjectedValues[\.utils].messageIdBuilder.makeMessageId(for: self)
     }
     

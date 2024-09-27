@@ -246,7 +246,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         } else {
             channelDataSource.loadFirstPage { [weak self] _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.scrolledId = self?.messages.first?.messageId
+                    self?.scrolledId = self?.messages.last?.messageId
                     self?.showScrollToLatestButton = false
                 }
             }
@@ -265,7 +265,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
             }
             return false
         }
-        if messageId == messages.first?.messageId {
+        if messageId == messages.last?.messageId {
             scrolledId = nil
             return true
         } else {
@@ -506,7 +506,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         loadingNextMessages = true
         
-        if scrollPosition != messages.first?.messageId {
+        if scrollPosition != messages.last?.messageId {
             scrollPosition = messages[index].messageId
         }
 
@@ -725,7 +725,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         if scrolledId != nil {
             scrolledId = nil
         }
-        scrolledId = messages.first?.messageId
+        scrolledId = messages.last?.messageId
     }
     
     private func cleanupAudioPlayer() {

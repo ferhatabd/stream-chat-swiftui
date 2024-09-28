@@ -501,7 +501,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         
         loadingNextMessages = true
         
-        if scrollPosition != messages.first?.messageId {
+        if scrollPosition != messages.last?.messageId {
             scrollPosition = messages[index].messageId
         }
 

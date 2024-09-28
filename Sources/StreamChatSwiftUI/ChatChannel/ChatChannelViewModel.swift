@@ -328,7 +328,7 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         }
         
         let message = messages[index]
-        if scrollDirection == .down {
+        if scrollDirection == .up {
             checkForOlderMessages(index: index)
         } else {
             checkForNewerMessages(index: index)

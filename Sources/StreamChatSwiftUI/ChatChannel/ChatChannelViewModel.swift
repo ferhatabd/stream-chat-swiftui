@@ -148,20 +148,20 @@ open class ChatChannelViewModel: ObservableObject, MessagesDataSource {
         channelDataSource.delegate = self
         messages = channelDataSource.messages
         channel = channelController.channel
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            if let scrollToMessage, let parentMessageId = scrollToMessage.parentMessageId, messageController == nil {
-                let message = channelController.dataStore.message(id: parentMessageId)
-                self?.threadMessage = message
-                self?.threadMessageShown = true
-                self?.messageCachingUtils.jumpToReplyId = scrollToMessage.messageId
-            } else if messageController != nil, let jumpToReplyId = self?.messageCachingUtils.jumpToReplyId {
-                self?.scrolledId = jumpToReplyId
-                self?.messageCachingUtils.jumpToReplyId = nil
-            } else if messageController == nil {
-                self?.scrolledId = scrollToMessage?.messageId
-            }
-        }
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+//            if let scrollToMessage, let parentMessageId = scrollToMessage.parentMessageId, messageController == nil {
+//                let message = channelController.dataStore.message(id: parentMessageId)
+//                self?.threadMessage = message
+//                self?.threadMessageShown = true
+//                self?.messageCachingUtils.jumpToReplyId = scrollToMessage.messageId
+//            } else if messageController != nil, let jumpToReplyId = self?.messageCachingUtils.jumpToReplyId {
+//                self?.scrolledId = jumpToReplyId
+//                self?.messageCachingUtils.jumpToReplyId = nil
+//            } else if messageController == nil {
+//                self?.scrolledId = scrollToMessage?.messageId
+//            }
+//        }
               
         NotificationCenter.default.addObserver(
             self,
